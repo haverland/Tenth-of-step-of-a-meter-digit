@@ -119,13 +119,13 @@ def preprocessing(img):
     return img
 
 
-Shift_Range = 2 # px
+Shift_Range = 0#2 # px
 Brightness_Range = [0.4,0.9]
 Rotation_Angle = 5
-ZoomRange_Out = 0.2
-ZoomRange_In = 0.1
+ZoomRange_Out = 0#0.2
+ZoomRange_In = 0#0.1
 ShearRange= 2
-Channel_Shift=20
+Channel_Shift=0#20
 Blur = 5
 
 def augmentation(x, y, Batch_Size = 32):

@@ -49,8 +49,9 @@ def Effnet(input_shape, nb_classes, include_top=True, weights=None, activation_t
         x = Flatten()(x)
         #x = Dropout(0.3)(x)
         x = Dense(256, activation="relu")(x)
-        x = Dense(128, activation="relu")(x)
-        x = Dense(64, activation="relu")(x)
+        #x = Dropout(0.3)(x)
+        x = Dense(256, activation="relu")(x)
+         #x = Dropout(0.3)(x)
         x = Dense(nb_classes, activation=activation_top)(x)
 
     model = Model(inputs=x_in, outputs=x)

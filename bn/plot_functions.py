@@ -9,7 +9,7 @@ def plot_dataset(images, labels, columns=12, rows=5):
     rows = 5
 
     for i in range(1, columns*rows +1):
-        if (i>=len(labels)):
+        if (i>len(labels)):
             break
         fig.add_subplot(rows, columns, i)
         plt.axis("off")

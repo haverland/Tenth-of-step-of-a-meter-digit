@@ -1,8 +1,8 @@
-Laqucer-Regular
+Lacquer-Regular
 StalinistOne-Regular
 EricaOne-Regular
-BigShouldersInLineDisplayLigh
-BigShouldersInLineDisplayThin
+BigShouldersInlineDisplayLigh
+BigShouldersInlineDisplayThin
 FasterOne-Regular
 Hanalei-Regular
 Shizuru-Regular
@@ -29,3 +29,14 @@ Akronim-Regular
 ZillaSlabHighlight-Bold
 Ewert-Regular
 Monofe
+Codystar-Ligh
+Dorsa-Regular
+Audiowide-Regular
+Festive-Regular
+TrainOne-Regular
+LondrinaOutline-Regular
+GeostarFill-Regular
+Limelight-Regular
+ZCOOLKuaiLe-Regular
+Kenia-Regular
+JacquesFrancoIsShadow-Regular

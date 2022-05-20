@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: meter-digits-pvc
+  namespace: default
+spec:
+  storageClassName: nfs-client
+  accessModes:
+  - ReadWriteMany
+  resources:
+     requests:
+       storage: 1Gi
+---
+kind: CronJob
+apiVersion: batch/v1
+metadata:
+  name: retrievedigits
+  namespace: default
+spec:
+  schedule: "20 0 * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            - name: meter-digits-pv
+              persistentVolumeClaim:
+                claimName: meter-digits-pvc
+          containers:
+            - name: retrievedigits
+              image: docker.io/haverland/retrievedigits:latest
+              resources: {}
+              volumeMounts:
+                - name: meter-digits-pv
+                  mountPath: /raw_images
+              imagePullPolicy: IfNotPresent
+          restartPolicy: Never
+
+
+ 

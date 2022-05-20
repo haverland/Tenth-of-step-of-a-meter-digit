@@ -1,0 +1,12 @@
+#tensorflow
+#tensorflow-model-optimization
+#opencv-python
+pillow
+numpy
+matplotlib
+#scipy
+#scikit-learn
+#fpdf2
+imagehash
+urllib3
+requests

@@ -70,3 +70,17 @@ PlayfairDisplaySC-Italic
 PlayfairDisplaySC-BoldItalic
 EmilysCandy-Regular
 BigelowRules-Regular
+LeagueScript-Regular
+OvertheRainbow
+LilyScriptOne-Regular
+SriSakdi-Bold
+Monoton-Regular
+Kristi-Regular
+JustMeAgainDownHere
+Ruthie-Regular
+SueEllenFancisco-Regular
+MrsSheppards-Regular
+LovedbytheKing
+SofadiOne-Regular
+Allison-Regular
+Ballet[opsz]

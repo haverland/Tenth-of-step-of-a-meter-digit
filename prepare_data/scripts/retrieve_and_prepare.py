@@ -74,8 +74,11 @@ def remove_similar_images(image_filenames, hashfunc = imagehash.average_hash):
 def remove_empty_folders(path_abs):
     walk = list(os.walk(path_abs))
     for path, _, _ in walk[::-1]:
-        if len(os.listdir(path)) == 0:
-            os.remove(path)
+        if len(os.listdir(path)) == 0 and not path == path_abs:
+            print("remove: ", path)
+            os.rmdir(path)
+
+
 
 os.makedirs(target_path, exist_ok=True)
 for meter in meters:

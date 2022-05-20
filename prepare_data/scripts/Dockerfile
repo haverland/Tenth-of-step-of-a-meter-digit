@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM armswdev/tensorflow-arm-neoverse:latest
 
 COPY requirements.txt ./
 RUN apt-get update

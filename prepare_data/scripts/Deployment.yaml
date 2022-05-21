@@ -17,7 +17,7 @@ metadata:
   name: retrievedigits
   namespace: default
 spec:
-  schedule: "20 0 * * *"
+  schedule: "20 2 * * *"
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 2
   jobTemplate:
@@ -35,7 +35,7 @@ spec:
               volumeMounts:
                 - name: meter-digits-pv
                   mountPath: /raw_images
-              imagePullPolicy: IfNotPresent
+              imagePullPolicy: Always
           restartPolicy: Never
 
 

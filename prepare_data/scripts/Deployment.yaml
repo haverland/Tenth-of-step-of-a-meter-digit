@@ -31,10 +31,13 @@ spec:
           containers:
             - name: retrievedigits
               image: docker.io/haverland/retrievedigits:latest
+              # Just spin & wait forever
+              #command: [ "/bin/bash", "-c", "--" ]
+              #args: [ "while true; do sleep 30; done;" ]
               resources: {}
               volumeMounts:
                 - name: meter-digits-pv
-                  mountPath: /raw_images
+                  mountPath: /data/
               imagePullPolicy: Always
           restartPolicy: Never
 

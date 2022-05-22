@@ -1,3 +1,4 @@
+from urllib.error import HTTPError
 import urllib.request
 import re
 import requests
@@ -11,39 +12,51 @@ import tensorflow.keras as keras
 
 
 
-target_path =  "/raw_images"
+target_path = "/data"                   # root data path
+target_raw_path =  "/data/raw_images"   # here all raw images will be stored
+target_predicted_path = "/data/predicted" # here all predictions are copied 
+
+# list of servernames of the edgeAI devices
 meters = (  "gasmeter1", "watermeter1", "watermeter2","emeter1")
 
-def yesterday():
+def yesterday(daysbefore=1):
     ''' return the date of yesterday as string in format yyyymmdd'''
-    yesterday = date.today() - timedelta(days=1)
+    yesterday = date.today() - timedelta(days=daysbefore)
     return yesterday.strftime("%Y%m%d")
 
 
-def readimages(servername):
+def readimages(servername, output_dir):
     '''get all images taken yesterday and store it in target path'''
     serverurl = "http://" + servername
     count = 0
     print(f"Loading data from {servername} ...")
-    for i in range(24):
-        hour = f'{i:02d}'
-        #(serverurl + "/fileserver/log/digit/" + yesterday() + "/" + hour+ "/")
-        fp = urllib.request.urlopen(serverurl + "/fileserver/log/digit/" + yesterday() + "/" + hour + "/")
-        mybytes = fp.read()
+    for datesbefore in range(1,5):
+        picturedate = yesterday(daysbefore=datesbefore)
+        # only if not exists already
+        if not os.path.exists(path = output_dir + "/" + servername + "/" + picturedate):
+            print("Loding ... ",  servername + "/" + picturedate)
+            for i in range(24):
+                hour = f'{i:02d}'
+                try:
+                    fp = urllib.request.urlopen(serverurl + "/fileserver/log/digit/" + picturedate + "/" + hour + "/")
+                except HTTPError as h:
+                    print("HTTPError at : " + serverurl + "/fileserver/log/digit/" + picturedate + "/" + hour + "/")
+                    continue
+                mybytes = fp.read()
 
-        mystr = mybytes.decode("utf8")
-        fp.close()
+                mystr = mybytes.decode("utf8")
+                fp.close()
 
-        urls = re.findall(r'href=[\'"]?([^\'" >]+)', mystr)
-        path = target_path + "/" + servername + "/" + yesterday() + "/" + hour
-        os.makedirs(path, exist_ok=True) 
-        for url in urls:
-            filename = os.path.basename(url)
-            if (not os.path.exists(path + "/" + filename)):
-                #print(serverurl+url)
-                img = Image.open(requests.get(serverurl+url, stream=True).raw)
-                img.save(path + "/" + filename)
-                count = count +1
+                urls = re.findall(r'href=[\'"]?([^\'" >]+)', mystr)
+                path = output_dir + "/" + servername + "/" + picturedate + "/" + hour
+                os.makedirs(path, exist_ok=True) 
+                for url in urls:
+                    filename = os.path.basename(url)
+                    if (not os.path.exists(path + "/" + filename)):
+                        #print(serverurl+url)
+                        img = Image.open(requests.get(serverurl+url, stream=True).raw)
+                        img.save(path + "/" + filename)
+                        count = count +1
     print(f"{count} images are loaded from meter: {servername}")
 
 
@@ -96,19 +109,11 @@ def ziffer_data(input_dir, use_grayscale=True):
 
         # ignore the category 10
         #if ( category<10):
-        y_file = np.vstack((y_file, [base]))
+        y_file = np.vstack((y_file, [aktfile]))
         x_data = np.vstack((x_data, test_image))
         y_data = np.vstack((y_data, [category]))
     print("Ziffer data count: ", len(y_data))   
     return x_data, y_data, y_file
-
-def move_to_pred_dir(prediction, filename, input_dirs=['test_data'], out_dir='predicted'):
-    for input_dir in input_dirs:
-        for root, dirs, files in os.walk(input_dir):
-            for file in files:
-                if file.startswith(filename):
-                    shutil.move(os.path.join(root, file), os.path.join(out_dir,str(prediction)+"_"+file))
-
 
 def class_encoding(y_train, nb_classes):
     ''' like to_categorical in sorted order'''
@@ -125,7 +130,7 @@ def class_decoding(y_train, nb_classes=100):
     return ret
 
 
-def remove_similar_images(image_filenames, hashfunc = imagehash.average_hash, hash_size=3):
+def remove_similar_images(image_filenames, hashfunc = imagehash.average_hash):
     '''removes similar images. 
     hash_size 2..n smaller values for more detected images
     '''
@@ -134,7 +139,7 @@ def remove_similar_images(image_filenames, hashfunc = imagehash.average_hash, ha
     
     for img in sorted(image_filenames):
         try:
-            hash = hashfunc(Image.open(img), hash_size=hash_size)
+            hash = hashfunc(Image.open(img))
         except Exception as e:
             print('Problem:', e, 'with', img)
             continue
@@ -162,38 +167,73 @@ def predict_images(input_dir, output_dir):
     '''predict all images input_dir and move the images to output_dir.
        The filename begins with prediction.
     '''
-    
     xz_data, yz_data, fz_data = ziffer_data(input_dir,  use_grayscale=True)
     input_shape=xz_data[0].shape
 
-
-    model = keras.models.load_model("/model/eff100-gray.h5")
-
-    os.makedirs(output_dir, exist_ok=True)
+    model = keras.models.load_model("/models/eff100-gray.h5")
 
     for x, y, filename in zip(xz_data, yz_data, fz_data):
-
+        base = os.path.basename(filename[0])
+        #print(f"predict: ", filename)
         classes = model.predict(np.expand_dims(x.reshape(input_shape), axis=0))
         out_target = class_decoding(classes).reshape(-1)[0]
-        move_to_pred_dir(out_target, filename[0], out_dir=output_dir )
+        target_filename = os.path.join(output_dir,str(out_target)+"_"+base)
+        # do not overwrite files
+        if not os.path.exists(target_filename):
+            shutil.copy(filename[0], target_filename)
 
+def mark_duplicates(input_dir):
+    ''' mark all duplicated (different predicted)  images with "X" at prefix'''
+    filenames = []
+    for root, dirs, files in os.walk(input_dir):
+        for file in files:
+            if (file.endswith(".jpg")):
+                filenames.append((root + "/" + file, file))
+    for filename in filenames:
+        file = filename[1]
 
+        # do not mark multiple times
+        if (file[0] == 'X'):
+            print("con")
+            continue
+
+        # if predicted, remove prediction for search
+        if (file[1] == '.'):
+            file = file[4:]
+        
+        print("Filename=", file)
+        # search for substrings
+        for s in filenames:
+            print(s, file)
+            if (s[1].endswith(file) and not( file == s[1])):
+                os.rename(filename[0], os.path.dirname(filename[0]) + "/X" +os.path.basename(filename[0]))
+       
 
 # ensure the target path exists
-os.makedirs(target_path, exist_ok=True)
+print("retrieve and prepare")
+os.makedirs(target_raw_path, exist_ok=True)
+os.makedirs(target_predicted_path, exist_ok=True)
 
 # read all images from meters
 for meter in meters:
-    readimages(meter)
+    readimages(meter, target_raw_path)
+
 
 # remove all same or similar images and remove the empty folders
-remove_similar_images(ziffer_data_files(target_path))
+#print("remove now all similar images")
+#remove_similar_images(ziffer_data_files(target_path))
 
 # predict now the images
-predict_images(target_path, target_path)
+#print("predict now all images and move to predicted directory")
+#predict_images(target_raw_path, target_predicted_path)
+
+# mark now duplicated images (manual fix or new model predicts newly)
+#print("mark all multiple and different predicted images with X")
+#mark_duplicates(target_predicted_path)
 
 #remove emtpy folders
-remove_empty_folders(target_path)
+#print("cleanup all directories in raw_path")
+#remove_empty_folders(target_raw_path)
 
 
 

@@ -130,30 +130,53 @@ def class_decoding(y_train, nb_classes=100):
     return ret
 
 
+from urllib.error import HTTPError
+import urllib.request
+import re
+import requests
+import os
+from PIL import Image
+from datetime import date, timedelta
+import shutil
+import numpy as np
+import imagehash
+import tensorflow.keras as keras
+
 def remove_similar_images(image_filenames, hashfunc = imagehash.average_hash):
     '''removes similar images. 
-    hash_size 2..n smaller values for more detected images
-    '''
-    images = {}
-    count = 0
     
+    '''
+    images = []
+    count = 0
+    cutoff = 3  # maximum bits that could be different between the hashes. 
+    print(len(image_filenames))
+  
     for img in sorted(image_filenames):
         try:
-            hash = hashfunc(Image.open(img))
+            hash = hashfunc(Image.open(img).convert('L'))
         except Exception as e:
             print('Problem:', e, 'with', img)
             continue
-        if hash in images:
-            #print(img, '  already exists as', ' '.join(images[hash]))
-            for dup in images[hash]:
-                try:
-                    os.remove(img)
-                    count=count+1
-                except Exception as e1:
-                    continue
-        images[hash] = images.get(hash, []) + [img]
-    print(f"{count} removed.")
-
+        images.append([hash, img])
+    
+    duplicates = {'1'}
+    for hash in images:
+        if (hash[1] not in duplicates):
+            #print(hash[1])
+            similarimgs = [i for i in images if abs(i[0]-hash[0]) < cutoff and i[1]!=hash[1]]
+            #print(set([row[1] for row in similarimgs]))
+            duplicates |= set([row[1] for row in similarimgs])
+            imgstoshow = []
+            labels = []
+            for imgf in similarimgs:
+                test_image = Image.open(imgf[1])
+                test_image = np.array(test_image, dtype="float32")
+                test_image = test_image/255.
+                imgstoshow.append(test_image)
+                labels.append(os.path.basename(imgf[1])[:-4])
+    print("Duplicates: ", len(duplicates))
+    for image in set(images)-duplicates:
+        shutil.copy(image, os.path.join('test_data', os.path.basename(image)))
 
 def remove_empty_folders(path_abs):
     '''all empty folders in path_abs will be deleted. not the path_abs'''
@@ -217,11 +240,11 @@ os.makedirs(target_predicted_path, exist_ok=True)
 # read all images from meters
 for meter in meters:
     readimages(meter, target_raw_path)
+    print("remove now all similar images")
+    # remove all same or similar images and remove the empty folders
+    remove_similar_images(ziffer_data_files(os.path.join(target_raw_path, meter)))
 
 
-# remove all same or similar images and remove the empty folders
-#print("remove now all similar images")
-#remove_similar_images(ziffer_data_files(target_path))
 
 # predict now the images
 #print("predict now all images and move to predicted directory")

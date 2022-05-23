@@ -9,7 +9,7 @@ import shutil
 import numpy as np
 import imagehash
 import tensorflow.keras as keras
-
+import time
 
 
 target_path = "/data"                   # root data path
@@ -71,8 +71,10 @@ def ziffer_data_files(input_dir):
     return  imgfiles
 
 
-def ziffer_data(input_dir, use_grayscale=True):
+def ziffer_data(input_dir, use_grayscale=True, only_n_days_old=1):
     '''return a tuple of (images, labels, filenames) in the given input dir'''
+    now = time.time()
+
     y_file = []
     y_data = []
     x_data = []
@@ -85,33 +87,34 @@ def ziffer_data(input_dir, use_grayscale=True):
         x_data = np.array(x_data).reshape(-1,32,20,3)
 
     for aktfile in files:
-        base = os.path.basename(aktfile)
-        if (base[1]=="."):
-            target = base[0:3]
-        else:
-            target = base[0:1]
-        if target == "N":
-            category = 10                # NaN does not work --> convert to 10
+        if os.stat(aktfile).st_mtime > now - only_n_days_old * 86400:
+            base = os.path.basename(aktfile)
+            if (base[1]=="."):
+                target = base[0:3]
+            else:
+                target = base[0:1]
+            if target == "N":
+                category = 10                # NaN does not work --> convert to 10
 
-        else:
-            category = float(target)
-        test_image = Image.open(aktfile).resize((20, 32))
-        if (use_grayscale):
-            test_image = test_image.convert('L')
-        test_image = np.array(test_image, dtype="float32")
-        test_image = test_image/255.
-            
-        #print(test_image.shape)
-        if (use_grayscale):
-            test_image = test_image.reshape(1,32,20,1)
-        else:
-            test_image = test_image.reshape(1,32,20,3)
+            else:
+                category = float(target)
+            test_image = Image.open(aktfile).resize((20, 32))
+            if (use_grayscale):
+                test_image = test_image.convert('L')
+            test_image = np.array(test_image, dtype="float32")
+            test_image = test_image/255.
+                
+            #print(test_image.shape)
+            if (use_grayscale):
+                test_image = test_image.reshape(1,32,20,1)
+            else:
+                test_image = test_image.reshape(1,32,20,3)
 
-        # ignore the category 10
-        #if ( category<10):
-        y_file = np.vstack((y_file, [aktfile]))
-        x_data = np.vstack((x_data, test_image))
-        y_data = np.vstack((y_data, [category]))
+            # ignore the category 10
+            #if ( category<10):
+            y_file = np.vstack((y_file, [aktfile]))
+            x_data = np.vstack((x_data, test_image))
+            y_data = np.vstack((y_data, [category]))
     print("Ziffer data count: ", len(y_data))   
     return x_data, y_data, y_file
 
@@ -130,18 +133,6 @@ def class_decoding(y_train, nb_classes=100):
     return ret
 
 
-from urllib.error import HTTPError
-import urllib.request
-import re
-import requests
-import os
-from PIL import Image
-from datetime import date, timedelta
-import shutil
-import numpy as np
-import imagehash
-import tensorflow.keras as keras
-
 def remove_similar_images(image_filenames, hashfunc = imagehash.average_hash):
     '''removes similar images. 
     
@@ -153,19 +144,21 @@ def remove_similar_images(image_filenames, hashfunc = imagehash.average_hash):
   
     for img in sorted(image_filenames):
         try:
-            hash = hashfunc(Image.open(img).convert('L'))
+            hash = hashfunc(Image.open(img).convert('L').resize((32,20)))
         except Exception as e:
             print('Problem:', e, 'with', img)
             continue
         images.append([hash, img])
     
-    duplicates = {'1'}
+    duplicates = {}
     for hash in images:
         if (hash[1] not in duplicates):
-            #print(hash[1])
             similarimgs = [i for i in images if abs(i[0]-hash[0]) < cutoff and i[1]!=hash[1]]
-            #print(set([row[1] for row in similarimgs]))
-            duplicates |= set([row[1] for row in similarimgs])
+            # add duplicates
+            if (duplicates == {}):
+                duplicates = set([row[1] for row in similarimgs])
+            else:
+                duplicates |= set([row[1] for row in similarimgs])
             imgstoshow = []
             labels = []
             for imgf in similarimgs:
@@ -175,8 +168,9 @@ def remove_similar_images(image_filenames, hashfunc = imagehash.average_hash):
                 imgstoshow.append(test_image)
                 labels.append(os.path.basename(imgf[1])[:-4])
     print("Duplicates: ", len(duplicates))
-    for image in set(images)-duplicates:
-        shutil.copy(image, os.path.join('test_data', os.path.basename(image)))
+    # remove now all duplicates
+    for image in duplicates:
+        os.remove(image)
 
 def remove_empty_folders(path_abs):
     '''all empty folders in path_abs will be deleted. not the path_abs'''
@@ -186,11 +180,11 @@ def remove_empty_folders(path_abs):
             print("remove: ", path)
             os.rmdir(path)
 
-def predict_images(input_dir, output_dir):
+def predict_images(input_dir, output_dir, days_to_predict=1):
     '''predict all images input_dir and move the images to output_dir.
        The filename begins with prediction.
     '''
-    xz_data, yz_data, fz_data = ziffer_data(input_dir,  use_grayscale=True)
+    xz_data, yz_data, fz_data = ziffer_data(input_dir,  use_grayscale=True, only_n_days_old=days_to_predict)
     input_shape=xz_data[0].shape
 
     model = keras.models.load_model("/models/eff100-gray.h5")
@@ -248,7 +242,7 @@ for meter in meters:
 
 # predict now the images
 #print("predict now all images and move to predicted directory")
-#predict_images(target_raw_path, target_predicted_path)
+predict_images(target_raw_path, target_predicted_path, days_to_predict=1)
 
 # mark now duplicated images (manual fix or new model predicts newly)
 #print("mark all multiple and different predicted images with X")

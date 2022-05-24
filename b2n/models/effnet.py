@@ -1,10 +1,10 @@
-from keras.models import Model
-from keras.layers import *
-from keras.activations import *
-from keras.callbacks import *
-from keras import Sequential
-from keras.layers import Dense, InputLayer, Conv2D, MaxPool2D, Flatten, Dropout, Activation
-from keras.layers import BatchNormalization, Rescaling, LayerNormalization
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import *
+from tensorflow.keras.activations import *
+from tensorflow.keras.callbacks import *
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense, InputLayer, Conv2D, MaxPool2D, Flatten, Dropout, Activation
+from tensorflow.keras.layers import BatchNormalization, Rescaling, LayerNormalization
 
 def get_post(x_in):
     x = LeakyReLU()(x_in)

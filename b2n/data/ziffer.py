@@ -38,8 +38,7 @@ def ziffer_data(input_dir, use_grayscale=True):
         test_image = Image.open(aktfile).resize((20, 32))
         if (use_grayscale):
             test_image = test_image.convert('L')
-        test_image = np.array(test_image, dtype="float32")
-        test_image = test_image/255.
+        test_image = np.array(test_image, dtype="uint8")
             
         #print(test_image.shape)
         if (use_grayscale):

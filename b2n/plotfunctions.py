@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from b2n.encodings.class_encoding import class_decoding
 def plot_dataset(images, labels, columns=12, rows=5, figsize=(18, 10)):
 
     fig = plt.figure(figsize=figsize)
@@ -13,9 +12,9 @@ def plot_dataset(images, labels, columns=12, rows=5, figsize=(18, 10)):
         plt.axis("off")
         plt.title(labels[i-1])  # set title
         if(images[i-1].shape[-1]==1):
-            plt.imshow((images[i-1]), aspect='auto', cmap='gray')
+            plt.imshow((images[i-1]), aspect='1', cmap='gray')
         else:
-            plt.imshow((images[i-1]), aspect='auto')
+            plt.imshow((images[i-1]).astype(np.uint8), aspect='1')
         plt.tight_layout()
     plt.show()
 
@@ -27,11 +26,11 @@ def plot_dataset_it(data_iter, columns=12, rows=5):
         img, label = data_iter.next()
         fig.add_subplot(rows, columns, i)
         plt.axis("off")
-        plt.title(str(class_decoding(label[0].reshape(-1,100)).reshape(-1)))  # set title
+        plt.title(str(class_decoding(label[0].reshape(-1, nb_classes), nb_classes).reshape(-1)))  # set title
         if(img[0].shape[-1]==1):
-            plt.imshow(img[0], aspect='auto', cmap='gray')
+            plt.imshow(img[0], aspect='1', cmap='gray')
         else:
-            plt.imshow(img[0], aspect='auto')
+            plt.imshow(img[0].astype(np.uint8), aspect='1')
     plt.show()
 
 def plot_acc_loss(history, modelname="modelname"):

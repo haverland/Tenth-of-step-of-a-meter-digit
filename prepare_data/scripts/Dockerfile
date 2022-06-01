@@ -6,7 +6,7 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 ADD retrieve_and_prepare.py /usr/local/bin/retrieve_and_prepare.py
-ADD eff100-gray.h5 /models/eff100-gray.h5
+ADD eff100-rgb.h5 /models/eff100-rgb.h5
 
 # because of segmentation fault
 ENV TF_ENABLE_ONEDNN_OPTS=0

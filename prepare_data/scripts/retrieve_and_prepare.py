@@ -71,7 +71,7 @@ def ziffer_data_files(input_dir):
     return  imgfiles
 
 
-def ziffer_data(input_dir, use_grayscale=True, only_n_days_old=1):
+def ziffer_data(input_dir, use_grayscale=False, only_n_days_old=1):
     '''return a tuple of (images, labels, filenames) in the given input dir'''
     now = time.time()
 
@@ -102,8 +102,7 @@ def ziffer_data(input_dir, use_grayscale=True, only_n_days_old=1):
             if (use_grayscale):
                 test_image = test_image.convert('L')
             test_image = np.array(test_image, dtype="float32")
-            test_image = test_image/255.
-                
+               
             #print(test_image.shape)
             if (use_grayscale):
                 test_image = test_image.reshape(1,32,20,1)
@@ -159,14 +158,7 @@ def remove_similar_images(image_filenames, hashfunc = imagehash.average_hash):
                 duplicates = set([row[1] for row in similarimgs])
             else:
                 duplicates |= set([row[1] for row in similarimgs])
-            imgstoshow = []
-            labels = []
-            for imgf in similarimgs:
-                test_image = Image.open(imgf[1])
-                test_image = np.array(test_image, dtype="float32")
-                test_image = test_image/255.
-                imgstoshow.append(test_image)
-                labels.append(os.path.basename(imgf[1])[:-4])
+            
     print("Duplicates: ", len(duplicates))
     # remove now all duplicates
     for image in duplicates:
@@ -184,15 +176,15 @@ def predict_images(input_dir, output_dir, days_to_predict=1):
     '''predict all images input_dir and move the images to output_dir.
        The filename begins with prediction.
     '''
-    xz_data, yz_data, fz_data = ziffer_data(input_dir,  use_grayscale=True, only_n_days_old=days_to_predict)
+    xz_data, yz_data, fz_data = ziffer_data(input_dir,  use_grayscale=False, only_n_days_old=days_to_predict)
     input_shape=xz_data[0].shape
-
-    model = keras.models.load_model("/models/eff100-gray.h5")
+    print("input_shape:", input_shape)
+    model = keras.models.load_model("/models/eff100-rgb.h5")
 
     for x, y, filename in zip(xz_data, yz_data, fz_data):
         base = os.path.basename(filename[0])
         #print(f"predict: ", filename)
-        classes = model.predict(np.expand_dims(x.reshape(input_shape), axis=0))
+        classes = model.predict(np.expand_dims(x.reshape(input_shape).astype(np.float32), axis=0))
         out_target = class_decoding(classes).reshape(-1)[0]
         target_filename = os.path.join(output_dir,str(out_target)+"_"+base)
         # do not overwrite files

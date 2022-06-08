@@ -17,7 +17,7 @@ metadata:
   name: retrievedigits
   namespace: default
 spec:
-  schedule: "20 0 * * *"
+  schedule: "20 2 * * *"
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 2
   jobTemplate:
@@ -31,11 +31,14 @@ spec:
           containers:
             - name: retrievedigits
               image: docker.io/haverland/retrievedigits:latest
+              # Just spin & wait forever
+              #command: [ "/bin/bash", "-c", "--" ]
+              #args: [ "while true; do sleep 30; done;" ]
               resources: {}
               volumeMounts:
                 - name: meter-digits-pv
-                  mountPath: /raw_images
-              imagePullPolicy: IfNotPresent
+                  mountPath: /data/
+              imagePullPolicy: Always
           restartPolicy: Never
 
 

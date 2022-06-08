@@ -2,4 +2,4 @@ scratchbook.ipynb
 .DS_Store
 failures/*
 raw_images/*
-images/*
+.DS_Store

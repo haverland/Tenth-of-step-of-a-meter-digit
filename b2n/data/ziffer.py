@@ -1,7 +1,9 @@
 import os
-import numpy as np
+import shutil
 from PIL import Image 
 from tensorflow import keras
+import numpy as np
+
 
 def ziffer_data_files(input_dir):
     imgfiles = []

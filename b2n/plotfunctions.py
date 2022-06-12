@@ -1,7 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-def plot_dataset(images, labels, columns=12, rows=5, figsize=(18, 10)):
+from b2n.encodings.class_encoding import class_decoding
+
+def plot_dataset(images, labels, columns=10, rows=5, figsize=(18, 10)):
 
     fig = plt.figure(figsize=figsize)
     
@@ -9,28 +11,32 @@ def plot_dataset(images, labels, columns=12, rows=5, figsize=(18, 10)):
         if (i>len(labels)):
             break
         fig.add_subplot(rows, columns, i)
-        plt.axis("off")
         plt.title(labels[i-1])  # set title
-        if(images[i-1].shape[-1]==1):
-            plt.imshow((images[i-1]), aspect='1', cmap='gray')
-        else:
-            plt.imshow((images[i-1]).astype(np.uint8), aspect='1')
+        plt.xticks([0.2, 0.4, 0.6, 0.8])
+        plt.imshow((images[i-1]).astype(np.uint8), aspect='1.6', extent=[0, 1, 0, 1])
+        # yellow lines
+        for y in np.arange(0.2, 0.8, 0.2):
+            plt.axhline(y=y,color='yellow')
+        ax=plt.gca()
+        ax.get_xaxis().set_visible(False) 
         plt.tight_layout()
     plt.show()
 
-def plot_dataset_it(data_iter, columns=12, rows=5):
+def plot_dataset_it(data_iter, columns=9, rows=5, nb_classes=100):
 
-    fig = plt.figure(figsize=(18, 10))
+    fig = plt.figure(figsize=(18, 11))
     
     for i in range(1, columns*rows +1):
         img, label = data_iter.next()
         fig.add_subplot(rows, columns, i)
-        plt.axis("off")
-        plt.title(str(class_decoding(label[0].reshape(-1, nb_classes), nb_classes).reshape(-1)))  # set title
-        if(img[0].shape[-1]==1):
-            plt.imshow(img[0], aspect='1', cmap='gray')
-        else:
-            plt.imshow(img[0].astype(np.uint8), aspect='1')
+        plt.xticks([0.2, 0.4, 0.6, 0.8])
+        plt.title(str(class_decoding(label[0].reshape(-1, nb_classes), nb_classes).reshape(-1)[0]))  # set title
+        plt.imshow(img[0].astype(np.uint8), aspect='1.6', extent=[0, 1, 0, 1])
+        ax=plt.gca()
+        ax.get_xaxis().set_visible(False) 
+        # yellow lines
+        for y in np.arange(0.2, 0.8, 0.2):
+                plt.axhline(y=y,color='yellow')
     plt.show()
 
 def plot_acc_loss(history, modelname="modelname"):
@@ -48,10 +54,10 @@ def plot_acc_loss(history, modelname="modelname"):
         ax2.plot(history.history['val_accuracy'])
     if "student_loss" in history.history:
         ax1.plot(history.history['student_loss'])
-    if "sparse_categorical_accuracy" in history.history:
-        ax2.plot(history.history['sparse_categorical_accuracy'])
-    if "val_sparse_categorical_accuracy" in history.history:
-        ax2.plot(history.history['val_sparse_categorical_accuracy'])
+    if "categorical_accuracy" in history.history:
+        ax2.plot(history.history['categorical_accuracy'])
+    if "val_categorical_accuracy" in history.history:
+        ax2.plot(history.history['val_categorical_accuracy'])
     if "student_accuracy" in history.history:
         ax2.plot(history.history['student_accuracy'])
     if "val_student_accuracy" in history.history:
@@ -88,3 +94,31 @@ def confusion_matrix(predicted, y_test, nb_classes):
     pd.set_option('display.expand_frame_repr', False)
     pd.set_option('max_colwidth', None)
     return pd.crosstab(ytrue, ypred)
+
+
+def predict_meter_digits(model, x_data, y_data, f_data):
+    import numpy as np
+    from tensorflow import keras
+
+    max_delta = 0.11
+
+    predictions = class_decoding(model.predict(x_data.astype(np.float32)), 100).reshape(-1)
+
+    # 9.9 <> 0 = 0.1 and 1.1 <> 1.2 = 0.1
+    differences = np.minimum(np.abs(predictions-y_data), np.abs(predictions-(10-y_data)))
+
+    # used for filtering
+    false_differences = differences>max_delta
+
+    # only differences bigger than delta. so small differences can be ignored in early stages
+    false_predicted = differences[false_differences]
+    false_images = x_data[false_differences]
+    false_labels = [ "Expected: " + str(y) + "\n Predicted: " + str(p) + "\n" + str(f)[-26:-4] for y, p, f in zip(y_data[false_differences], predictions[false_differences], f_data[false_differences])]
+
+    print(f"Tested images: {len(y_data)}. {len(false_predicted)} false predicted. Accuracy is: {1-len(false_predicted)/len(y_data)}")
+
+    # plot the differences (max difference can only be 5.0)
+    plot_divergence(np.bincount(np.array(false_predicted*10).astype(int), minlength=51), "Divergation of false predicted", 51)
+
+    # plot the false predicted images
+    plot_dataset(np.array(false_images), false_labels, columns=7, rows=7, figsize=(18,18))

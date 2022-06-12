@@ -3,17 +3,17 @@ import numpy as np
 import pandas as pd
 from sklearn.utils import shuffle
 
-def tmnist_percentals():
+def tmnist_percentals(input_dir="datasets", max_count=28 ):
     y_train = np.empty((0))
     x_train = np.empty((0, 32, 20,3))
     
     # fonts in blacklist will be removed from dataset
-    blacklist_url = "datasets/font-blacklist.txt"
+    blacklist_url = input_dir + "/font-blacklist.txt"
     blacklist_data = pd.read_csv(blacklist_url, index_col=False)
     
-    for i in range(28):
+    for i in range(max_count):
 
-        dataset_url = "datasets/TMNIST_PERCENTAL_"+str((i+1)*1000)+"_Data.csv"
+        dataset_url = input_dir + "/TMNIST_PERCENTAL_"+str((i+1)*1000)+"_Data.csv"
         data = pd.read_csv(dataset_url, index_col=False)
         data = data.drop(data[data['names'].isin(blacklist_data.values.reshape(-1))].index)
         
@@ -40,4 +40,3 @@ def tmnist_percentals():
         y_train = np.concatenate((y_tmnist.values.reshape(-1), y_train))
     
     return shuffle(x_train,  y_train, n_samples=len(y_train))
-

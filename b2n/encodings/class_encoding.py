@@ -1,4 +1,5 @@
-from tensorflow import keras
+import tensorflow.keras as keras
+import math
 import numpy as np
 
 def class_encoding(y_train, nb_classes):

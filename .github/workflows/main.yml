@@ -32,5 +32,5 @@ jobs:
           title: "github action for upload dataset PTMNIST"
           subtitle: "Tenth of step of TMNIST"
           description: "description"
-          files:  Readme.md 
+          files:  datasets/TMNIST_PERCENTAL_1000_Data.csv
           is_public: true

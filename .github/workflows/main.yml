@@ -31,6 +31,6 @@ jobs:
           id:  "haverland/percentile-tmnist-for-electric-meters"
           title: "github action for upload dataset PTMNIST"
           subtitle: "Tenth of step of TMNIST"
-          description: ""
-          files:  datasets/*
+          description: "description"
+          files:  datasets/* 
           is_public: true

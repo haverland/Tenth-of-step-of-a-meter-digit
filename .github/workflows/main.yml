@@ -32,5 +32,5 @@ jobs:
           title: "github action for upload dataset PTMNIST"
           subtitle: "Tenth of step of TMNIST"
           description: "description"
-          files:  datasets/* 
+          files:  Readme.md 
           is_public: true

@@ -32,7 +32,7 @@ def VGG_like(input_shape, nb_classes, activation_top=None):
     model.add(Dropout(0.4))
 
     model.add(Flatten())
-    model.add(Dense(128, activation='relu'))
+    model.add(Dense(256, activation='relu'))
     model.add(Dropout(0.4))
     model.add(Dense(nb_classes, activation=activation_top))
     return model

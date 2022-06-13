@@ -28,8 +28,8 @@ jobs:
           KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
 
         with:
-          id:  "frankhaverland/tenth-of-step-of-meter-digits"
-          title: "images of meter digits"
+          id:  "frankhaverland/tenthofstepofmeterdigits"
+          title: "imagesofmeterdigits"
           subtitle: "Tenth of step of meter digits"
           description: "description"
           files:  images

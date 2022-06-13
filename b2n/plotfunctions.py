@@ -2,6 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from b2n.encodings.class_encoding import class_decoding
+import tensorflow as tf
+from PIL import Image 
+import os
 
 def plot_dataset(images, labels, columns=10, rows=5, figsize=(18, 10)):
 
@@ -96,11 +99,9 @@ def confusion_matrix(predicted, y_test, nb_classes):
     return pd.crosstab(ytrue, ypred)
 
 
-def predict_meter_digits(model, x_data, y_data, f_data):
+def predict_meter_digits(model, x_data, y_data, f_data, max_delta = 0.11):
     import numpy as np
     from tensorflow import keras
-
-    max_delta = 0.11
 
     predictions = class_decoding(model.predict(x_data.astype(np.float32)), 100).reshape(-1)
 
@@ -122,3 +123,41 @@ def predict_meter_digits(model, x_data, y_data, f_data):
 
     # plot the false predicted images
     plot_dataset(np.array(false_images), false_labels, columns=7, rows=7, figsize=(18,18))
+
+
+def evaluate_ziffer_tflite(model_path, x_data, y_data, f_data, title, max_delta = 0.11):
+    false_images = []
+    false_labels = []
+    false_predicted = []
+
+    # we use the tflite model
+    interpreter = tf.lite.Interpreter(model_path=model_path)
+    interpreter.allocate_tensors()
+    input_index = interpreter.get_input_details()[0]["index"]
+    output_index = interpreter.get_output_details()[0]["index"]
+
+
+    for x, y, f in zip(x_data, y_data, f_data):
+        
+        interpreter.set_tensor(input_index, np.expand_dims(x.astype(np.float32), axis=0))
+        # Run inference.
+        interpreter.invoke()
+        # Post-processing: remove batch dimension and find the digit with highest
+        # probability.
+        output = interpreter.get_tensor(output_index)
+        prediction = class_decoding(output)[0][0]
+        difference = min(abs(prediction-y), abs(prediction-(10-y)))
+        #print(prediction, y, difference)
+        if difference>max_delta:
+            false_images.append(x)
+            false_labels.append( "Expected: " + str(y) + "\n Predicted: " + str(prediction) + "\n" + str(f)[-26:-4])
+            false_predicted.append(difference)
+               
+    
+    print(f"Tested images: {len(y_data)}. {len(false_labels)} false predicted. Accuracy is: {1-len(false_labels)/len(y_data)}")
+    # plot the differences (max difference can only be 5.0)
+    plot_divergence(np.bincount(np.array(np.array(false_predicted)*10).astype(int), minlength=51), "Divergation of false predicted", 51)
+
+    # plot the false predicted images
+    plot_dataset(np.array(false_images), false_labels, columns=7, rows=7, figsize=(18,18))
+

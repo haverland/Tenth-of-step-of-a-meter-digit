@@ -28,7 +28,7 @@ jobs:
           KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
 
         with:
-          id:  "haverland/percentile-tmnist-for-electric-meters"
+          id:  "frankhaverland/percentile-tmnist-for-electric-meters"
           title: "github action for upload dataset PTMNIST"
           subtitle: "Tenth of step of TMNIST"
           description: "description"

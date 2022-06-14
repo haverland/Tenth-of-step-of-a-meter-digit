@@ -28,7 +28,7 @@ jobs:
           KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
 
         with:
-          id:  "frankhaverland/b2n"
+          id:  "frankhaverland/b2n_utils"
           title: "utilsforcnn"
           subtitle: "Plotfunctions,Models,Helpers"
           description: "description"

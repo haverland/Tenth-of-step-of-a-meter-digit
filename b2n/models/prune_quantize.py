@@ -21,7 +21,6 @@ def prune(model, x_train, y_train, x_test, y_test, batch_size=32, epochs=1):
 
     # Compute end step to finish pruning after 2 epochs.
     batch_size = 32
-    epochs = 1
     validation_split = 0.1 # 10% of training set will be used for validation set. 
 
     num_images = x_train.shape[0] 

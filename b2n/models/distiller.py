@@ -9,6 +9,8 @@ class Distiller(keras.Model):
         super(Distiller, self).__init__()
         self.teacher = teacher
         self.student = student
+        #self.distribute_strategy = student.distribute_strategy
+        #self._options = student._options
 
     def compile(
         self,
@@ -91,3 +93,14 @@ class Distiller(keras.Model):
         results = {m.name: m.result() for m in self.metrics}
         results.update({"student_loss": student_loss})
         return results
+
+    def load_weights(self, filepath_to_load):
+        return self.student.load_weights(filepath_to_load)
+
+    def save_weights(self, filepath, overwrite=True, options=None):
+        self.student.save_weights(filepath, overwrite=overwrite, options=options)
+    
+    def save(self, filepath, overwrite=True, options=None):
+        self.student.save(filepath, overwrite=overwrite, options=options)
+    
+    

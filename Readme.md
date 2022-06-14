@@ -31,7 +31,7 @@ The folder contains images of <https://github.com/jomjol/neural-network-autotrai
 
 The naming of the notebooks is `pmd-<output>_<model>_<strategy>.ipynb`.
 
-* *output* can
+* *output* can be
   * `cat`for categorical
   * `reg`for regression
 * *model* are a short name for the model type

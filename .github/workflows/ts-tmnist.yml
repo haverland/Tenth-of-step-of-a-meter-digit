@@ -32,5 +32,7 @@ jobs:
           title: "github action for upload dataset PTMNIST"
           subtitle: "Tenth of step of TMNIST"
           description: "description"
-          files:  datasets/TMNIST_PERCENTAL_*.csv
+          files:  | 
+            datasets/TMNIST_PERCENTAL_*.csv
+            datasets/font-blacklist.txt
           is_public: true

@@ -1,7 +1,11 @@
+from code import interact
 import tensorflow as tf
 import numpy as np
 import pandas as pd
 from sklearn.utils import shuffle
+from tensorflow import keras
+from keras.preprocessing.image import ImageDataGenerator
+
 
 def tmnist_percentals(input_dir="datasets", max_count=28 ):
     y_train = np.empty((0))
@@ -40,3 +44,13 @@ def tmnist_percentals(input_dir="datasets", max_count=28 ):
         y_train = np.concatenate((y_tmnist.values.reshape(-1), y_train))
     
     return shuffle(x_train,  y_train, n_samples=len(y_train))
+
+def flow_tmnist(dataset_dir='datasets/tmnist'):
+    
+    ds = tf.keras.utils.image_dataset_from_directory(directory=dataset_dir, 
+                                            image_size=(32,28), 
+                                            batch_size=32,
+                                            color_mode='rgb',
+                                            label_mode='categorical',
+                                            shuffle=True)
+    return ds

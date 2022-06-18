@@ -34,5 +34,5 @@ jobs:
           title: "imagesofmeterdigits"
           subtitle: "Tenth of step of meter digits"
           description: "description"
-          files:  images
+          files:  datasets/meterdigits
           is_public: true

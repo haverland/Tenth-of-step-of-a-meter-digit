@@ -36,4 +36,5 @@ jobs:
           files:  | 
             datasets/TMNIST_PERCENTAL_*.csv
             datasets/font-blacklist.txt
+            datasets/tmnist
           is_public: true

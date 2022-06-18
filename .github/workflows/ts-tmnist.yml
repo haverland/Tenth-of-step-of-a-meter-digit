@@ -27,7 +27,6 @@ jobs:
           # Do not leak your credentials.
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
           KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
-
         with:
           id:  "frankhaverland/tenth-of-step-of-TMNIST"
           title: "github action for upload dataset PTMNIST"

@@ -152,7 +152,7 @@ def augmentation(x, y, Batch_Size = 32, Width_Shift_Range = 3, Height_Shift_Rang
                              brightness_range=Brightness_Range,
                              #zoom_range=[1-ZoomRange_In, 1+ZoomRange_Out],
                              rotation_range=Rotation_Angle,
-                             channel_shift_range=Channel_Shift,
+                             #channel_shift_range=Channel_Shift,
                              fill_mode='nearest',
                              shear_range=ShearRange
                              ,preprocessing_function=preprocessing_function

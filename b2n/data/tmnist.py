@@ -45,7 +45,7 @@ def tmnist_percentals(input_dir="datasets", max_count=28 ):
     
     return shuffle(x_train,  y_train, n_samples=len(y_train))
 
-def flow_tmnist(dataset_dir='datasets/tmnist'):
+def load_dataset(dataset_dir):
     
     ds = tf.keras.utils.image_dataset_from_directory(directory=dataset_dir, 
                                             image_size=(32,28), 

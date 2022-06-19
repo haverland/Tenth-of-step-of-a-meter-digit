@@ -113,6 +113,7 @@ def predict_meter_digits(model, x_data, y_data, f_data, max_delta = 0.11, classd
     false_predicted = differences[false_differences]
     false_images = x_data[false_differences]
     false_labels = [ "Expected: " + str(y) + "\n Predicted: " + str(p) + "\n" + str(f)[-26:-4] for y, p, f in zip(y_data[false_differences], predictions[false_differences], f_data[false_differences])]
+    false_files = [ f for f in  f_data[false_differences]]
 
     print(f"Tested images: {len(y_data)}. {len(false_predicted)} false predicted. Accuracy is: {1-len(false_predicted)/len(y_data)}")
 
@@ -121,7 +122,7 @@ def predict_meter_digits(model, x_data, y_data, f_data, max_delta = 0.11, classd
 
     # plot the false predicted images
     plot_dataset(np.array(false_images), false_labels, columns=7, rows=7, figsize=(18,18))
-
+    return false_files
 
 def evaluate_ziffer_tflite(model_path, x_data, y_data, f_data, title, max_delta = 0.11):
     false_images = []

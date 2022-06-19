@@ -19,7 +19,7 @@ def ziffer_data(input_dir='images'):
     files = ziffer_data_files(input_dir)
     
     y_data = np.empty((len(files)))
-    y_file = np.empty((len(files)), dtype="S100")
+    y_file = np.empty((len(files)), dtype="<U50")
     x_data = np.empty((len(files),32,20,3))
 
     for i, aktfile in enumerate(files):
@@ -35,7 +35,7 @@ def ziffer_data(input_dir='images'):
         
         test_image = Image.open(aktfile).resize((20, 32))
         test_image = np.array(test_image, dtype="float32")
-        y_file[i] =  base
+        y_file[i] =  aktfile
         x_data[i] = test_image
         y_data[i] =  category
     print("Ziffer data count: ", len(y_data))   

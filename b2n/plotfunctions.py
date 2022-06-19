@@ -105,7 +105,7 @@ def predict_meter_digits(model, x_data, y_data, f_data, max_delta = 0.11, classd
 
     # 9.9 <> 0 = 0.1 and 1.1 <> 1.2 = 0.1
     differences = np.minimum(np.abs(predictions-y_data), np.abs(predictions-(10-y_data)))
-
+    
     # used for filtering
     false_differences = differences>max_delta
 

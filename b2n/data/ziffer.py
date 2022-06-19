@@ -19,7 +19,7 @@ def ziffer_data(input_dir='images'):
     files = ziffer_data_files(input_dir)
     
     y_data = np.empty((len(files)))
-    y_file = np.empty((len(files)), dtype="<U50")
+    y_file = np.empty((len(files)), dtype="<U250")
     x_data = np.empty((len(files),32,20,3))
 
     for i, aktfile in enumerate(files):

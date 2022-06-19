@@ -118,7 +118,7 @@ def predict_meter_digits(model, x_data, y_data, f_data, max_delta = 0.11, classd
     print(f"Tested images: {len(y_data)}. {len(false_predicted)} false predicted. Accuracy is: {1-len(false_predicted)/len(y_data)}")
 
     # plot the differences (max difference can only be 5.0)
-    plot_divergence(np.bincount(np.array(false_predicted*10).astype(int), minlength=51), "Divergation of false predicted", 51)
+    plot_divergence(np.bincount(np.array(np.round(false_predicted*10)).astype(int), minlength=51), "Divergation of false predicted", 51)
 
     # plot the false predicted images
     plot_dataset(np.array(false_images), false_labels, columns=7, rows=7, figsize=(18,18))

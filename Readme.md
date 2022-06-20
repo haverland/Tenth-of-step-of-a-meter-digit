@@ -38,10 +38,9 @@ The naming of the notebooks is `pmd-<output>_<model>_<strategy>.ipynb`.
   * `eff`for Effnet <https://github.com/arthurdouillard/keras-effnet>
   * `cnn`classical cnn model. Can be different in size.
 * *strategy*
-  * `transfer` for transfer learning
-  * `teacher`for knowledge distillation the teacher model
-  * `distillation` for knowledge distillation of the student model.
-
+  * `md` runs only on meter digit images, no TMNIST fonts used
+  * `transfer`
+  
 ### Transfer learning
 
 On Transfer learning a model will be trained with other datasets and learn the convolutional layers.
@@ -49,15 +48,19 @@ Mostly pretrained models are used. We learn the model with tenth of step of TMNI
 
 In a second step only the last layer or all fully connected layers are retrained. The convolutional layers will not be trained.
 
-Examples are `pmd-cat_eff_transfer` and `pmd-cat_CNN3_transfer`.
+Examples are `pmd-cat_eff_transfer`
 
-### Knowledge distillation
+### Learning on meter digits
 
-A bigger teacher model will be trained with a real good accuracy. After it a smaller student model will be trained with help of the teacher model. For more details <https://keras.io/examples/vision/knowledge_distillation/>
+The notebooks learning only on meter digit images as long as the model can be trained. The quality depends on the mount of images. (Currently 12.000)
 
-Examples are `pmd-cat_CNN_teacher`and `pmd-cat_eff_distillation`.
+Examples are `pmd-cat_cnn-s1_md.ipynb` and `pmd-cat_eff_md.ipynb`
 
-Because of the good results in transfer learning a knowledge distillation does not have a great effect.
+After run a csv file will created with list of false predicted image file names. The file can be used with
+
+   python3 -m collectmeterdigits --labelfile=output/eff100md_false_predicted.csv
+
+to fix labels or check the labeling.
 
 ### Pruning and Quantization
 

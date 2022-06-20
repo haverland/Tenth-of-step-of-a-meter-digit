@@ -4,3 +4,4 @@ failures/*
 raw_images/*
 .DS_Store
 .ipynb_checkpoints
+.vscode/settings.json

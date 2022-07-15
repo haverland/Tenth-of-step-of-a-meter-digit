@@ -5,3 +5,5 @@ raw_images/*
 .DS_Store
 .ipynb_checkpoints
 .vscode/settings.json
+output/cnn32-md_best.h5
+output/cnn32-md_false_predicted.csv

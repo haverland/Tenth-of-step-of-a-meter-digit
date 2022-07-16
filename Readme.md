@@ -67,3 +67,9 @@ to fix labels or check the labeling.
 For using on edgeAI devices the model will be pruned and quantized. It can be used with Tensorflow light.
 
 The notebook `make_tflite.ipynb` creates the tflite-model and evaluate the results. This are the results of the target edgeAI device.
+
+## Versions
+
+### 1.0 (2022-07-16)
+
+* dig-s1d-md-v1.0 - with 99.8% accuracy

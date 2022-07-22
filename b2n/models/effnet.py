@@ -11,6 +11,7 @@ from tensorflow.keras.layers import BatchNormalization, Rescaling, LayerNormaliz
 def get_post(x_in):
     x = LeakyReLU()(x_in)
     x = BatchNormalization()(x)
+    x = Dropout(.1)(x)
     return x
 
 def get_block(x_in, ch_in, ch_out):
@@ -49,6 +50,7 @@ def Effnet(input_shape, nb_classes, include_top=True, weights=None, activation_t
 
     if include_top:
         x = Flatten()(x)
+        x = Dropout(.3)(x)
         x = Dense(nb_classes, activation=activation_top)(x)
 
     model = Model(inputs=x_in, outputs=x)

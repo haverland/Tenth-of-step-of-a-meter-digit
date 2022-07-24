@@ -70,6 +70,15 @@ The notebook `make_tflite.ipynb` creates the tflite-model and evaluate the resul
 
 ## Versions
 
+### 1.2 (2022-07-24)
+
+* dig_s1d-md-v1.2 - with 99.8% accuracy (+/- 0.1) and 89.5% accuracy.
+* compare_all_tflite supports dhy models
+
+### 1.1 (not releases)
+
+* dig_s1d-md-v1.1 - with 99.7% accuracy (+/- 0.1) and 88.7% accuracy.
+
 ### 1.0 (2022-07-16)
 
-* dig-s1d-md-v1.0 - with 99.8% accuracy
+* dig-s1d-md-v1.0 - with 99.6% accuracy (+/-0.1)

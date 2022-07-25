@@ -32,14 +32,15 @@ The folder contains images of <https://github.com/jomjol/neural-network-autotrai
 The naming of the notebooks is `pmd-<output>_<model>_<strategy>.ipynb`.
 
 * *output* can be
-  * `cat`for categorical
-  * `reg`for regression
+  * `cnn` for categorical (`dig` as model name)
+  * `reg`for regression (currently not used)
 * *model* are a short name for the model type
   * `eff`for Effnet <https://github.com/arthurdouillard/keras-effnet>
-  * `cnn`classical cnn model. Can be different in size.
+  * `s1`classical cnn model. Can be different in size.
+  * `s1d`classical cnn model, but with two convolutional layer in each block. The models are bigger in size.
 * *strategy*
   * `md` runs only on meter digit images, no TMNIST fonts used
-  * `transfer`
+  * `transfer` transfer learning
   
 ### Transfer learning
 
@@ -62,11 +63,22 @@ After run a csv file will created with list of false predicted image file names.
 
 to fix labels or check the labeling.
 
-### Pruning and Quantization
+### Quantization
 
-For using on edgeAI devices the model will be pruned and quantized. It can be used with Tensorflow light.
+For using on edgeAI devices the model will be quantized. It can be used with Tensorflow light.
 
 The notebook `make_tflite.ipynb` creates the tflite-model and evaluate the results. This are the results of the target edgeAI device.
+
+### Comparing the different models
+
+To get a better overview of the different models and their results, the notebook compare_all_tflite.ipynb can be used.
+
+It can handle classification models with output of 100 classes and the hyprid models with 10 classes too.
+
+Older models with 11 classes are not comparable.
+
+It compares two times. First with delta +/- 0.1 as ok and the second without any delta. It is because the models not reaches >99% accuracy without delta, 
+but in most times with delta=0.1
 
 ## Versions
 

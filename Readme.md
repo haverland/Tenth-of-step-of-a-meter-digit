@@ -27,20 +27,17 @@ The complete dataset has 300.000 images. Some fonts are not good for training th
 
 The folder contains images of <https://github.com/jomjol/neural-network-autotrain-digital-counter/tree/main/ziffer_raw> and collected images from others. See <https://github.com/haverland/collectmeterdigits>.
 
-## Notebooks and strategies
+## Naming and Versioning
 
-The naming of the notebooks is `pmd-<output>_<model>_<strategy>.ipynb`.
+The naming of the notebooks is `dig-class<output>_<size>.ipynb`.
 
 * *output* can be
-  * `cnn` for categorical (`dig` as model name)
-  * `reg`for regression (currently not used)
-* *model* are a short name for the model type
-  * `eff`for Effnet <https://github.com/arthurdouillard/keras-effnet>
-  * `s1`classical cnn model. Can be different in size.
-  * `s1d`classical cnn model, but with two convolutional layer in each block. The models are bigger in size.
-* *strategy*
-  * `md` runs only on meter digit images, no TMNIST fonts used
-  * `transfer` transfer learning
+  * `dig-class10` for categorical (`dig` as model name)
+* size 
+  s0: >30 M FLOPS
+  s1: 20-30 M FLOPS
+  s2: 10-20 M FLOPS
+  s3: < 10 M FLOPS
   
 ### Transfer learning
 
@@ -49,13 +46,11 @@ Mostly pretrained models are used. We learn the model with tenth of step of TMNI
 
 In a second step only the last layer or all fully connected layers are retrained. The convolutional layers will not be trained.
 
-Examples are `pmd-cat_eff_transfer`
+Examples are `dig-class100_s1_transfer`
 
 ### Learning on meter digits
 
 The notebooks learning only on meter digit images as long as the model can be trained. The quality depends on the mount of images. (Currently 12.000)
-
-Examples are `pmd-cat_cnn-s1_md.ipynb` and `pmd-cat_eff_md.ipynb`
 
 After run a csv file will created with list of false predicted image file names. The file can be used with
 
@@ -84,13 +79,13 @@ but in most times with delta=0.1
 
 ### 1.2 (2022-07-24)
 
-* dig_s1d-md-v1.2 - with 99.8% accuracy (+/- 0.1) and 89.5% accuracy.
+* dig-class100_0120_s2 - with 99.8% accuracy (+/- 0.1) and 89.5% accuracy.
 * compare_all_tflite supports dhy models
 
 ### 1.1 (not releases)
 
-* dig_s1d-md-v1.1 - with 99.7% accuracy (+/- 0.1) and 88.7% accuracy.
+* dig-class100_0110_s1 - with 99.7% accuracy (+/- 0.1) and 88.7% accuracy.
 
 ### 1.0 (2022-07-16)
 
-* dig-s1d-md-v1.0 - with 99.6% accuracy (+/-0.1)
+* dig-class100_0100_s2 - with 99.6% accuracy (+/-0.1)

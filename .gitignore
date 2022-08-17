@@ -7,3 +7,4 @@ raw_images/*
 .vscode/settings.json
 output/cnn32-md_best.h5
 output/cnn32-md_false_predicted.csv
+output/tmp/*

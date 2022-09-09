@@ -140,7 +140,7 @@ Brightness_Range = [0.4,1.2]
 
 
 def augmentation(x, y, Batch_Size = 32, Width_Shift_Range = 3, Height_Shift_Range = 0, 
-                    Brightness_Range = [0.4,1.2],
+                    Brightness_Range = [0.4,1.6],
                     Rotation_Angle = 5,
                     ZoomRange_Out = 0.1,
                     ZoomRange_In = 0.1,

@@ -5,4 +5,5 @@ scipy
 scikit-learn
 pandas
 tensorflow
+opencv-python
 tflite-runtime; sys_platform == "linux"

@@ -1,0 +1,7 @@
+pillow
+numpy
+matplotlib
+scipy
+scikit-learn
+pandas
+tflite-runtime; sys_platform == "linux"

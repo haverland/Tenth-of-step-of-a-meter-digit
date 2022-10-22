@@ -10,8 +10,27 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+
+  create-dataset:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+    - run: pip install -r requirements.txt
+    - uses: yaananth/run-notebook@v2
+      env:
+        RUNNER: ${{ toJson(runner) }}
+        SECRETS: ${{ toJson(secrets) }}
+        GITHUB: ${{ toJson(github) }}
+      with:
+        notebook: "prepre_data/tenth of step of meter digits-createimages.ipynb"
+        #params: "PATHTOPARAMS.json"
+        isReport: False
+        poll: False
   # This workflow contains a single job called "build"
   upload:
+    needs: create-dataset
     if: "contains(github.event.commits[0].message, 'upload to kaggle')"
     
     # The type of runner that the job will run on

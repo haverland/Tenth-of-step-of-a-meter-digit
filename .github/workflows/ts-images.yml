@@ -5,8 +5,12 @@ name: upload-meterdigits
 on:
   push:
     branches: [ master ]
+    paths:
+      - images/**
   pull_request:
     branches: [ master ]
+    paths:
+      - images/**
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -31,7 +35,6 @@ jobs:
   # This workflow contains a single job called "build"
   upload:
     needs: create-dataset
-    if: "contains(github.event.commits[0].message, 'upload to kaggle')"
     
     # The type of runner that the job will run on
     runs-on: ubuntu-latest

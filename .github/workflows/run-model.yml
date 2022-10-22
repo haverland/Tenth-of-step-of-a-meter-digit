@@ -13,6 +13,8 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
     - run: pip install -r requirements.txt
+    # cleans output for later upload only new created tflites.
+    - run: rm output/*
     - uses: yaananth/run-notebook@v2
       env:
         RUNNER: ${{ toJson(runner) }}
@@ -22,11 +24,19 @@ jobs:
         notebook: "dig-class100-s2.ipynb"
         #params: "PATHTOPARAMS.json"
         isReport: False
-        poll: True
+        poll: False
     - uses: actions/upload-artifact@v3
       if: always()
       with:
-        name: output
-        path: ${{ RUNNER.temp }}/nb-runner
+        name: notebook-results
+        path: |
+          ${{ RUNNER.temp }}/nb-runner 
+          output/*
       env:
         RUNNER: ${{ toJson(runner) }}
+    - uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: tflite-model
+        path: output/*.tflite
+     

@@ -8,12 +8,10 @@ The idea comes from <https://github.com/jomjol/AI-on-the-edge-device> project.
 
 Folders:
 
-* datasets - TMNIS-Dataset and the TMNIS-percental dataset
-* failures - after run all failures of meter digits will be moved here for later manual post processing
 * images - all labeled meter digits.
 * prepare_data - all pre processing notebooks for creating the percental TMNIS-Digits, sorting out not good fonts, retrieving images from my own AI-on-the-edge-devices
-* raw_images - stored retrieved images from my own AI-on-the-edge-devices
-* test_data - all images for the test_manual - notebook.
+* output - the resulting tflite-models
+* b2n - python util classes for smaller notebooks
 
 ## Datasets
 

@@ -17,15 +17,33 @@ Folders:
 
 ## Datasets
 
-### Percental TMNIST
-
-The Type face MNIST dataset comes from kaggle <https://www.kaggle.com/datasets/nimishmagre/tmnist-typeface-mnist> and is processed for percental digits <https://www.kaggle.com/datasets/frankhaverland/percentile-tmnist-for-electric-meters>.
-
-The complete dataset has 300.000 images. Some fonts are not good for training the meter digits and will removed by blacklist entries.
-
 ### Images of gas, water and power meters
 
-The folder contains images of <https://github.com/jomjol/neural-network-autotrain-digital-counter/tree/main/ziffer_raw> and collected images from others. See <https://github.com/haverland/collectmeterdigits>.
+The folder `images` contains images of <https://github.com/jomjol/neural-network-autotrain-digital-counter/tree/main/ziffer_raw> and collected images from others. See <https://github.com/haverland/collectmeterdigits>.
+
+
+#### Add my own data
+
+The images can be collected with [collectmeterdigits](https://github.com/haverland/collectmeterdigits). Read the instructions of the project.
+
+In `images/collected` can new images be added. The structure is
+
+```
+images
+└───collected
+    └───powermeter
+    │    └ Manufacturer
+    │      └ <yourshortcut>
+    │         └ images.jpg
+    └───watermeter
+    │    └ Manufacturer
+    │      └ <yourshortcut>
+    │         └ images.jpg
+    └───gasmeter
+         └ Manufacturer
+           └ <yourshortcut>
+              └ images.jpg
+```
 
 ## Naming and Versioning
 
@@ -38,58 +56,33 @@ The naming of the notebooks is `dig-class<output>_<size>.ipynb`.
   s1: 20-30 M FLOPS
   s2: 10-20 M FLOPS
   s3: < 10 M FLOPS
+
+So dig-class100_s1 is bigger than dig-class100-s2
   
-### Transfer learning
+## Learning on meter digits
 
-On Transfer learning a model will be trained with other datasets and learn the convolutional layers.
-Mostly pretrained models are used. We learn the model with tenth of step of TMNIST dataset (folder dataset) and the meter digit images.
+The notebooks learning only on meter digit images as long as the model can be trained. The quality depends on the mount of images. (Currently 17.000)
 
-In a second step only the last layer or all fully connected layers are retrained. The convolutional layers will not be trained.
+Add your images like described above and run 
 
-Examples are `dig-class100_s1_transfer`
+dig-class100_s1.ipynb or
+dig-class100_s2.ipynb
 
-### Learning on meter digits
-
-The notebooks learning only on meter digit images as long as the model can be trained. The quality depends on the mount of images. (Currently 12.000)
+dig-class100_s0 is to big for the esp32 device and only used for comparisations.
 
 After run a csv file will created with list of false predicted image file names. The file can be used with
 
-   python3 -m collectmeterdigits --labelfile=output/eff100md_false_predicted.csv
+   python3 -m collectmeterdigits --labelfile=output/tmp/dig-class100-s2_false_predicted.csv
 
 to fix labels or check the labeling.
 
-### Quantization
-
-For using on edgeAI devices the model will be quantized. It can be used with Tensorflow light.
-
-The notebook `make_tflite.ipynb` creates the tflite-model and evaluate the results. This are the results of the target edgeAI device.
 
 ### Comparing the different models
 
-To get a better overview of the different models and their results, the notebook compare_all_tflite.ipynb can be used.
+To get a better overview of the different models and their results, the notebook `compare_all_tflite.ipynb` can be used.
 
 It can handle classification models with output of 100 classes and the hyprid models with 10 classes too.
 
 Older models with 11 classes are not comparable.
 
-It compares two times. First with delta +/- 0.1 as ok and the second without any delta. It is because the models not reaches >99% accuracy without delta, 
-but in most times with delta=0.1
-
-## Versions
-
-### 1.3 (2022-08-25)
-* added new images
-* dig-class-0130_s2 - with 99.9% accuracy (+/- 0.1) and 89% accuracy.
-
-### 1.2 (2022-07-24)
-
-* dig-class100_0120_s2 - with 99.8% accuracy (+/- 0.1) and 89.5% accuracy.
-* compare_all_tflite supports dhy models
-
-### 1.1 (not releases)
-
-* dig-class100_0110_s1 - with 99.7% accuracy (+/- 0.1) and 88.7% accuracy.
-
-### 1.0 (2022-07-16)
-
-* dig-class100_0100_s2 - with 99.6% accuracy (+/-0.1)
+It compares two times. First with delta +/- 0.1 as ok and the second without any delta. It is because the models not reaches >99% accuracy without delta, but in most times with delta=0.1

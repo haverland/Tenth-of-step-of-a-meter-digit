@@ -1,18 +1,40 @@
-name: upload
+name: upload-meterdigits
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
   push:
     branches: [ master ]
+    paths:
+      - images/**
   pull_request:
     branches: [ master ]
+    paths:
+      - images/**
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+
+  create-dataset:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+    - run: pip install -r requirements.txt
+    - uses: yaananth/run-notebook@v2
+      env:
+        RUNNER: ${{ toJson(runner) }}
+        SECRETS: ${{ toJson(secrets) }}
+        GITHUB: ${{ toJson(github) }}
+      with:
+        notebook: "prepre_data/tenth of step of meter digits-createimages.ipynb"
+        #params: "PATHTOPARAMS.json"
+        isReport: False
+        poll: False
   # This workflow contains a single job called "build"
   upload:
-    if: "contains(github.event.commits[0].message, 'upload to kaggle')"
+    needs: create-dataset
     
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -20,7 +42,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       # Runs a single command using the runners shell
       - name: Upload datasets
         uses: jaimevalero/push-kaggle-dataset@v3 # This is the action

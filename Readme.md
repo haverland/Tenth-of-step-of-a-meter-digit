@@ -77,6 +77,10 @@ but in most times with delta=0.1
 
 ## Versions
 
+### 1.5 (2022-12-18)
+* new images
+* dig-class-0150_s2
+
 ### 1.3 (2022-08-25)
 * added new images
 * dig-class-0130_s2 - with 99.9% accuracy (+/- 0.1) and 89% accuracy.

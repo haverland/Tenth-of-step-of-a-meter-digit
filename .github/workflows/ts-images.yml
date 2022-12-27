@@ -28,7 +28,7 @@ jobs:
         SECRETS: ${{ toJson(secrets) }}
         GITHUB: ${{ toJson(github) }}
       with:
-        notebook: "prepre_data/tenth of step of meter digits-createimages.ipynb"
+        notebook: "prepre_data/digits-createimages.ipynb"
         #params: "PATHTOPARAMS.json"
         isReport: False
         poll: False

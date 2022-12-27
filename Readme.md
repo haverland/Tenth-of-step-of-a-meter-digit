@@ -77,6 +77,10 @@ but in most times with delta=0.1
 
 ## Versions
 
+### 1.6 (2002-12-27)
+* new images
+* dig-class-160_s2
+
 ### 1.5 (2022-12-18)
 * new images
 * dig-class-0150_s2

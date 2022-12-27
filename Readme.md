@@ -83,4 +83,33 @@ It can handle classification models with output of 100 classes and the hyprid mo
 
 Older models with 11 classes are not comparable.
 
-It compares two times. First with delta +/- 0.1 as ok and the second without any delta. It is because the models not reaches >99% accuracy without delta, but in most times with delta=0.1
+
+It compares two times. First with delta +/- 0.1 as ok and the second without any delta. It is because the models not reaches >99% accuracy without delta, 
+but in most times with delta=0.1
+
+## Versions
+
+### 1.6 (2002-12-27)
+* new images
+* dig-class-160_s2
+
+### 1.5 (2022-12-18)
+* new images
+* dig-class-0150_s2
+
+### 1.3 (2022-08-25)
+* added new images
+* dig-class-0130_s2 - with 99.9% accuracy (+/- 0.1) and 89% accuracy.
+
+### 1.2 (2022-07-24)
+
+* dig-class100_0120_s2 - with 99.8% accuracy (+/- 0.1) and 89.5% accuracy.
+* compare_all_tflite supports dhy models
+
+### 1.1 (not releases)
+
+* dig-class100_0110_s1 - with 99.7% accuracy (+/- 0.1) and 88.7% accuracy.
+
+### 1.0 (2022-07-16)
+
+* dig-class100_0100_s2 - with 99.6% accuracy (+/-0.1)

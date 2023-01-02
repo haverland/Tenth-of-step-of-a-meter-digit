@@ -19,7 +19,7 @@ Folders:
 
 The folder `images` contains images of <https://github.com/jomjol/neural-network-autotrain-digital-counter/tree/main/ziffer_raw> and collected images from others. See <https://github.com/haverland/collectmeterdigits>.
 
-An overview of the data can be found [here](https://github.com/haverland/Tenth-of-step-of-a-meter-digit/settings/pages).
+An overview of the data can be found [here](https://github.com/haverland/Tenth-of-step-of-a-meter-digit/index.html).
 
 #### Add my own data
 

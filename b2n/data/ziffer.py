@@ -34,7 +34,15 @@ def ziffer_data(input_dir='images', input_shape=(32,20,3)):
         category = float(target)
         
         test_image = Image.open(aktfile).resize((input_shape[1],input_shape[0]))
+        
+        # convert to grayscale if input_shape = set to 1 for colorchannels
+        if (input_shape[2] == 1):
+            test_image = test_image.convert("L")
+    
         test_image = np.array(test_image, dtype="float32")
+
+        if (input_shape[2] == 1):
+            test_image = np.expand_dims(test_image, axis=2)
         y_file[i] =  aktfile
         x_data[i] = test_image
         y_data[i] =  category

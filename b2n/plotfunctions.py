@@ -15,7 +15,7 @@ def plot_dataset(images, labels, columns=10, rows=5, figsize=(18, 10)):
             break
         fig.add_subplot(rows, columns, i)
         plt.title(labels[i-1])  # set title
-        plt.imshow((images[i-1]).astype(np.uint8), aspect='1.6', extent=[0, 1, 0, 1])
+        plt.imshow((images[i-1]).astype(np.uint8), aspect='1.6', cmap='gray', extent=[0, 1, 0, 1])
         # yellow lines
         [plt.axhline(y=y,color='yellow') for y in np.arange(0.2, 0.8, 0.2)]
         ax=plt.gca()
@@ -32,7 +32,7 @@ def plot_dataset_it(data_iter, columns=9, rows=5, nb_classes=100, classdecoding=
         fig.add_subplot(rows, columns, i)
         plt.xticks([0.2, 0.4, 0.6, 0.8])
         plt.title(str(classdecoding(label[0].reshape(-1, nb_classes), nb_classes).reshape(-1)[0]))  # set title
-        plt.imshow(img[0].astype(np.uint8), aspect='1.6', extent=[0, 1, 0, 1])
+        plt.imshow(img[0].astype(np.uint8), aspect='1.6', cmap='gray', extent=[0, 1, 0, 1], )
         ax=plt.gca()
         ax.get_xaxis().set_visible(False) 
         # yellow lines

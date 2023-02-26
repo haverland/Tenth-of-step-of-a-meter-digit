@@ -90,7 +90,12 @@ but in most times with delta=0.1
 
 ## Versions
 
-### 1.6 (2002-12-27)
+### 1.6.1 (2023-02-26)
+* new images (lcd)
+* fixed quantization bug - use all images for dataset
+* dig-class-161_s2
+
+### 1.6 (2022-12-27)
 * new images
 * dig-class-160_s2
 

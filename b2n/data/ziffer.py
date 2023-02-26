@@ -26,11 +26,11 @@ def ziffer_data(input_dir='images', input_shape=(32,20,3)):
         base = os.path.basename(aktfile)
 
         # get label from filename (1.2_ new or 1_ old),
-        if (base[1]=="."):
+        if (base[1]=="." and not base[2] == 'j'):
             target = base[0:3]
         else:
             target = base[0:1]
-         
+        #print(base)
         category = float(target)
         
         test_image = Image.open(aktfile).resize((input_shape[1],input_shape[0]))

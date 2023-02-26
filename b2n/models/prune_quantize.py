@@ -78,7 +78,7 @@ def quantization_sparse(model, x_train):
 
     def representative_dataset():
         for n in range(x_train[0].size):
-            data = np.expand_dims(x_train[5], axis=0)
+            data = np.expand_dims(x_train[n], axis=0)
         yield [data.astype(np.float32)]
             
     converter2 = tf.lite.TFLiteConverter.from_keras_model(model)
@@ -103,13 +103,12 @@ def quantization_default(model, x_train):
 
     def representative_dataset():
         for n in range(x_train[0].size):
-            data = np.expand_dims(x_train[5], axis=0)
+            data = np.expand_dims(x_train[n], axis=0)
         yield [data.astype(np.float32)]
             
     converter2 = tf.lite.TFLiteConverter.from_keras_model(model)
     converter2.representative_dataset = representative_dataset
     converter2.optimizations = [tf.lite.Optimize.DEFAULT]
-    converter2.representative_dataset = representative_dataset
     # Ensure that if any ops can't be quantized, the converter throws an error
     converter2.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
     # Set the input and output tensors to uint8 (APIs added in r2.3)

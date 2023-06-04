@@ -7,3 +7,4 @@ pandas
 tensorflow
 tensorflow-model-optimization
 opencv-python
+notebook

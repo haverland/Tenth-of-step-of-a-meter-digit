@@ -97,20 +97,16 @@ def quantization_sparse(model, x_train):
 def quantization_default(model, x_train):
     ##### Quantization of the pruned model
     
-    converter    = tf.lite.TFLiteConverter.from_keras_model(model)
-    converter.experimental_enable_resource_variables = True
-    tflite_model = converter.convert()
-
     def representative_dataset():
-        for n in range(x_train[0].size):
-            data = np.expand_dims(x_train[n], axis=0)
-        yield [data.astype(np.float32)]
-            
+        for data in tf.data.Dataset.from_tensor_slices((x_train)).batch(1).take(100):
+            yield [tf.dtypes.cast(data, tf.float32)]
+
     converter2 = tf.lite.TFLiteConverter.from_keras_model(model)
     converter2.representative_dataset = representative_dataset
     converter2.optimizations = [tf.lite.Optimize.DEFAULT]
     # Ensure that if any ops can't be quantized, the converter throws an error
     converter2.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
+    #converter2.target_spec.supported_ops = [tf.lite.OpsSet.EXPERIMENTAL_TFLITE_BUILTINS_ACTIVATIONS_INT16_WEIGHTS_INT8, tf.lite.OpsSet.TFLITE_BUILTINS]
     # Set the input and output tensors to uint8 (APIs added in r2.3)
     #converter2.inference_input_type = tf.uint8
     #converter2.inference_output_type = tf.uint8

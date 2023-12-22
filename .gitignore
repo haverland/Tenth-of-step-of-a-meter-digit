@@ -10,3 +10,6 @@ output/cnn32-md_false_predicted.csv
 output/tmp/*
 __pycache__/
 *.pyc
+.venv/
+.vend/
+.idea/

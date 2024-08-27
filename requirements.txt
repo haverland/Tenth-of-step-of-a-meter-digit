@@ -3,7 +3,6 @@ numpy
 matplotlib
 scipy
 scikit-learn
-sklearn
 pandas
 tensorflow>=2.12.1; sys_platform != 'darwin'
 tensorflow>=2.12.1; sys_platform == 'darwin'

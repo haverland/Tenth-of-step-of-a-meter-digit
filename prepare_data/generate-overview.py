@@ -15,7 +15,7 @@ def concat_images(image_paths, size, shape=None):
     images = [ImageOps.expand(image, border=2,fill='white')
               for image in images]
     
-    images = [ImageOps.fit(image, size, Image.ANTIALIAS) 
+    images = [ImageOps.fit(image, size, Image.Resampling.LANCZOS) 
               for image in images]
     
     # Create canvas for the final image with total size

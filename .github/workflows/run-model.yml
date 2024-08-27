@@ -19,25 +19,15 @@ jobs:
     - run: pip install -r requirements.txt
     # cleans output for later upload only new created tflites.
     - run: rm output/*.*
-    - uses: yaananth/run-notebook@v2
-      env:
-        RUNNER: ${{ toJson(runner) }}
-        SECRETS: ${{ toJson(secrets) }}
-        GITHUB: ${{ toJson(github) }}
-      with:
-        notebook: "dig-class100-s2.ipynb"
-        #params: "PATHTOPARAMS.json"
-        isReport: False
-        poll: False
+    - name: Execute
+      run: |
+        jupyter nbconvert --execute --to html dig-class100-s2.ipynb --output-dir output/
     - uses: actions/upload-artifact@v3
       if: always()
       with:
         name: notebook-results
         path: |
-          ${{ RUNNER.temp }}/nb-runner 
           output/*
-      env:
-        RUNNER: ${{ toJson(runner) }}
     - uses: actions/upload-artifact@v3
       if: always()
       with:

@@ -1,6 +1,7 @@
 pillow
 numpy
 matplotlib
+lxml_html_clean
 scipy
 scikit-learn
 pandas

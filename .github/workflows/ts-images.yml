@@ -27,6 +27,7 @@ jobs:
         RUNNER: ${{ toJson(runner) }}
         SECRETS: ${{ toJson(secrets) }}
         GITHUB: ${{ toJson(github) }}
+        PYTHONUNBUFFERED: "1"
       with:
         notebook: "prepare_data/digits-createimages.ipynb"
         #params: "PATHTOPARAMS.json"

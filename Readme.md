@@ -90,6 +90,12 @@ but in most times with delta=0.1
 
 ## Versions
 
+### 1.7.0
+
+* fix tensorflow vulnerability
+* new images 
+* fix kaggle upload
+
 ### 1.6.1 (2023-02-26)
 * new images (lcd)
 * fixed quantization bug - use all images for dataset

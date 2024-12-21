@@ -28,7 +28,7 @@ def plot_dataset_it(data_iter, columns=9, rows=5, nb_classes=100, classdecoding=
     fig = plt.figure(figsize=(18, 11))
     
     for i in range(1, columns*rows +1):
-        img, label = data_iter.next()
+        img, label = next(data_iter)
         fig.add_subplot(rows, columns, i)
         plt.xticks([0.2, 0.4, 0.6, 0.8])
         plt.title(str(classdecoding(label[0].reshape(-1, nb_classes), nb_classes).reshape(-1)[0]))  # set title

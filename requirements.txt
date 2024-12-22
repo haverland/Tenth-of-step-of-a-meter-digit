@@ -12,5 +12,5 @@ tensorflow-macos>=2.13.0, < 2.14.0; sys_platform == 'darwin'
 opencv-python
 notebook
 jupyter
-nbconvert
+nbconvert<7.0.0
 typing-extensions

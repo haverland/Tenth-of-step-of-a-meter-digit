@@ -12,5 +12,5 @@ tensorflow-metal==0.8; sys_platform == 'darwin'
 opencv-python
 notebook
 jupyter
-nbconvert
+nbconvert<7.0.0
 typing_extensions<4.6.0

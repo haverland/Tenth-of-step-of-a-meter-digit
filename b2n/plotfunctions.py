@@ -40,6 +40,24 @@ def plot_dataset_it(data_iter, columns=9, rows=5, nb_classes=100, classdecoding=
                 plt.axhline(y=y,color='yellow')
     plt.show()
 
+def plot_dataset_ds(data_set, columns=9, rows=5, nb_classes=100, classdecoding=class_decoding):
+
+    fig = plt.figure(figsize=(18, 11))
+    data_iter = iter(data_set)
+
+    for i in range(1, columns*rows +1):
+        img, label = next(data_iter)
+        fig.add_subplot(rows, columns, i)
+        plt.xticks([0.2, 0.4, 0.6, 0.8])
+        plt.title(str(class_decoding(np.array(label), nb_classes).reshape(-1)[0] ))  # set title
+        plt.imshow(np.array(img).astype(np.uint8), aspect='1.6', cmap='gray', extent=[0, 1, 0, 1], )
+        ax=plt.gca()
+        ax.get_xaxis().set_visible(False) 
+        # yellow lines
+        for y in np.arange(0.2, 0.8, 0.2):
+                plt.axhline(y=y,color='yellow')
+    plt.show()
+
 def plot_acc_loss(history, modelname="modelname"):
     fig, (ax1, ax2) = plt.subplots(1, 2)
     fig.suptitle(modelname)

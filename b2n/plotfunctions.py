@@ -3,8 +3,7 @@ import numpy as np
 import pandas as pd
 from b2n.encodings.class_encoding import class_decoding
 import tensorflow as tf
-from PIL import Image 
-import os
+
 
 def plot_dataset(images, labels, columns=10, rows=5, figsize=(18, 10)):
 

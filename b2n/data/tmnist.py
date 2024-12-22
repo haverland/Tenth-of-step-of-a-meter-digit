@@ -3,8 +3,7 @@ import tensorflow as tf
 import numpy as np
 import pandas as pd
 from sklearn.utils import shuffle
-from tensorflow import keras
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tf.keras.preprocessing.image import ImageDataGenerator
 
 
 def tmnist_percentals(input_dir="datasets", max_count=28 ):

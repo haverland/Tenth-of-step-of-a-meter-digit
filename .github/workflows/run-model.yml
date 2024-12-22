@@ -23,7 +23,7 @@ jobs:
     - run: rm output/*.*
     - name: Execute
       run: |
-        jupyter nbconvert --execute --to html dig-class100-s2.ipynb --output-dir output/
+        jupyter execute  dig-class100-s2.ipynb
     - uses: actions/upload-artifact@v3
       if: always()
       with:

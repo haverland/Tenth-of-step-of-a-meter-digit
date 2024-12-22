@@ -5,8 +5,8 @@ lxml_html_clean
 scipy
 scikit-learn
 pandas
-tensorflow>=2.12.1; sys_platform != 'darwin'
-tensorflow-macos>=2.12.1; sys_platform == 'darwin'
+tensorflow>=2.12.1,2.13.0 sys_platform != 'darwin'
+tensorflow-macos>=2.12.1,<2.13.0; sys_platform == 'darwin'
 tensorflow-metal==0.8; sys_platform == 'darwin'
 tensorflow-model-optimization
 opencv-python

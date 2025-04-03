@@ -2,7 +2,9 @@ import numpy as np
 from scipy.stats import norm
 import cv2
 import random
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
+#from tensorflow.keras.preprocessing.image import ImageDataGenerator
+import tensorflow as tf
+import tensorflow.python.keras.layers as layers
 import random
 
 def add_noise(img):
@@ -141,25 +143,30 @@ Brightness_Range = [0.4,1.2]
 
 def augmentation(x, y, Batch_Size = 32, Width_Shift_Range = 3, Height_Shift_Range = 0, 
                     Brightness_Range = [0.4,1.6],
-                    Rotation_Angle = 5,
+                    Rotation_Angle = 0.01,
                     ZoomRange_Out = 0.1,
                     ZoomRange_In = 0.1,
                     ShearRange= 3,
                     Channel_Shift=0.4,
                     preprocessing_function=preprocessing):
-    datagen = ImageDataGenerator(width_shift_range=Width_Shift_Range, 
-                             height_shift_range=Height_Shift_Range,
-                             brightness_range=Brightness_Range,
-                             #zoom_range=[1-ZoomRange_In, 1+ZoomRange_Out],
-                             rotation_range=Rotation_Angle,
-                             #channel_shift_range=Channel_Shift,
-                             fill_mode='nearest',
-                             shear_range=ShearRange
-                             ,preprocessing_function=preprocessing_function
-                             ,dtype=float)
-    #datagen.fit(x)
-    return datagen.flow(x, y, batch_size=Batch_Size)
+#    datagen = ImageDataGenerator(width_shift_range=Width_Shift_Range, 
+#                             height_shift_range=Height_Shift_Range,
+#                             brightness_range=Brightness_Range,
+#                             #zoom_range=[1-ZoomRange_In, 1+ZoomRange_Out],
+#                             rotation_range=Rotation_Angle,
+#                             #channel_shift_range=Channel_Shift,
+#                             fill_mode='nearest',
+#                             shear_range=ShearRange
+#                             ,preprocessing_function=preprocessing_function
+#                             ,dtype=float)
+
+    preprocessing = tf.keras.Sequential([
+        tf.keras.layers.RandomZoom([ZoomRange_In, ZoomRange_Out]),
+        tf.keras.layers.RandomRotation((-Rotation_Angle, Rotation_Angle))])
+
+    datagen = tf.data.Dataset.from_tensor_slices(x, y)
+    return datagen #datagen.map(preprocessing)   
+    
     
 def no_augmentation(x, y, Batch_Size = 32):
-    datagen = ImageDataGenerator(dtype=float)
-    return datagen.flow(x, y, batch_size=Batch_Size)
+    return tf.data.Dataset.from_tensor_slices(x, y)

@@ -90,6 +90,10 @@ but in most times with delta=0.1
 
 ## Versions
 
+### 1.8.0
+* upgrade to tensorflow 2.17
+* breaking changes in preprocessing
+
 ### 1.7.0
 
 * fix tensorflow vulnerability

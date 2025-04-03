@@ -1,7 +1,5 @@
 import os
-import shutil
 from PIL import Image 
-from tensorflow import keras
 import numpy as np
 
 

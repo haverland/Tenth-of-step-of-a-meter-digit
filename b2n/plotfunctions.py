@@ -49,7 +49,7 @@ def plot_dataset_ds(data_set, columns=9, rows=5, nb_classes=100, classdecoding=c
         img, label = next(data_iter)
         fig.add_subplot(rows, columns, i)
         plt.xticks([0.2, 0.4, 0.6, 0.8])
-        plt.title(str(class_decoding(np.array(label), nb_classes).reshape(-1)[0] ))  # set title
+        plt.title(str(class_decoding(np.array(label).reshape(1,nb_classes), nb_classes).reshape(-1)[0] ))  # set title
         plt.imshow(np.array(img).astype(np.uint8), aspect='1.6', cmap='gray', extent=[0, 1, 0, 1], )
         ax=plt.gca()
         ax.get_xaxis().set_visible(False) 

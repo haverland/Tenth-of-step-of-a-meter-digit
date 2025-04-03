@@ -106,6 +106,7 @@ def quantization_default(model, x_train):
     converter2.optimizations = [tf.lite.Optimize.DEFAULT]
     # Ensure that if any ops can't be quantized, the converter throws an error
     converter2.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
+    converter2._experimental_disable_per_channel_quantization_for_dense_layers = True
     #converter2.target_spec.supported_ops = [tf.lite.OpsSet.EXPERIMENTAL_TFLITE_BUILTINS_ACTIVATIONS_INT16_WEIGHTS_INT8, tf.lite.OpsSet.TFLITE_BUILTINS]
     # Set the input and output tensors to uint8 (APIs added in r2.3)
     #converter2.inference_input_type = tf.uint8

@@ -48,7 +48,7 @@ jobs:
         run: python prepare_data/generate-overview.py
         
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
 #          path: '.'
@@ -56,4 +56,4 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4

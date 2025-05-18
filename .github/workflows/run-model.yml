@@ -13,7 +13,7 @@ jobs:
   build-model:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
@@ -24,13 +24,13 @@ jobs:
     - name: Execute
       run: |
         jupyter nbconvert --execute --to html dig-class100-s2.ipynb --output-dir output/
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: always()
       with:
         name: notebook-results
         path: |
           output/*
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: always()
       with:
         name: tflite-model

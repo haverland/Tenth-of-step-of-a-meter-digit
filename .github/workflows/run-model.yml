@@ -24,6 +24,7 @@ jobs:
     - run: rm output/*.*
     - name: Execute
       run: |
+        mkdir -p output/tmp
         jupyter nbconvert --execute --to html dig-class100-s2.ipynb --output-dir output/
     - uses: actions/upload-artifact@v4
       if: always()
